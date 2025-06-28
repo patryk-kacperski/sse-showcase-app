@@ -23,7 +23,7 @@ var summaries = new[]
 
 app.MapGet("/weatherforecast", () =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
+    var forecast = Enumerable.Range(1, 5).Select(index =>
         new WeatherForecast
         (
             DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
@@ -34,6 +34,17 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 })
 .WithName("GetWeatherForecast")
+.WithOpenApi();
+
+app.MapGet("/numbers", async (HttpResponse response) =>
+{
+    response.Headers.Add("Content-Type", "text/event-stream");
+    response.Headers.Add("Cache-Control", "no-cache");
+    response.Headers.Add("Connection", "keep-alive");
+
+    await response.Body.FlushAsync();
+})
+.WithName("GetNumbers")
 .WithOpenApi();
 
 app.Run();
