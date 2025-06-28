@@ -16,29 +16,20 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+app.MapGet("/numbers", async (HttpResponse response) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    response.Headers.Add("Content-Type", "text/event-stream");
+    response.Headers.Add("Cache-Control", "no-cache");
+    response.Headers.Add("Connection", "keep-alive");
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    while (!response.HttpContext.RequestAborted.IsCancellationRequested)
+    {
+        await response.WriteAsync(":\n\n");
+        await response.Body.FlushAsync();
+        await Task.Delay(5000);
+    }
 })
-.WithName("GetWeatherForecast")
+.WithName("GetNumbers")
 .WithOpenApi();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
