@@ -42,7 +42,17 @@ app.MapGet("/numbers", async (HttpResponse response) =>
     response.Headers.Add("Cache-Control", "no-cache");
     response.Headers.Add("Connection", "keep-alive");
 
-    await response.Body.FlushAsync();
+    var random = new Random();
+
+    for (int i = 1; i <= 10; i++)
+    {
+        var data = $"data: {i}\n\n";
+        await response.WriteAsync(data);
+        await response.Body.FlushAsync();
+
+        var delay = random.NextDouble() * 1.5 + 0.5;
+        await Task.Delay(TimeSpan.FromSeconds(delay));
+    }
 })
 .WithName("GetNumbers")
 .WithOpenApi();
