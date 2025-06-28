@@ -1,3 +1,6 @@
+using SSEShowcase.Enums;
+using SSEShowcase.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -22,11 +25,19 @@ app.MapGet("/numbers", async (HttpResponse response) =>
     response.Headers.Add("Cache-Control", "no-cache");
     response.Headers.Add("Connection", "keep-alive");
 
-    while (!response.HttpContext.RequestAborted.IsCancellationRequested)
+    var random = new Random();
+
+    for (int i = 1; i <= 10; i++)
     {
-        await response.WriteAsync(":\n\n");
+        if (response.HttpContext.RequestAborted.IsCancellationRequested)
+            break;
+
+        var delay = random.NextDouble() * 1.5 + 0.5; // Random delay between 0.5 and 2.0 seconds
+        await Task.Delay(TimeSpan.FromSeconds(delay));
+
+        await response.WriteAsync($"event: {SseEventType.Numbers.ToEventString()}\n");
+        await response.WriteAsync($"data: {i}\n\n");
         await response.Body.FlushAsync();
-        await Task.Delay(5000);
     }
 })
 .WithName("GetNumbers")
