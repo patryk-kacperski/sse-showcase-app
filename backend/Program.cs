@@ -2,8 +2,6 @@ using SSEShowcase.Enums;
 using SSEShowcase.Extensions;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("SSEShowcase.Tests")]
-
 namespace SSEShowcase;
 
 public partial class Program
