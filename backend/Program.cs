@@ -5,6 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+using SSEShowcase.Util;
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -43,10 +45,12 @@ app.MapGet("/numbers", async (HttpResponse response) =>
     response.Headers.Add("Connection", "keep-alive");
 
     var random = new Random();
+    var eventType = SseEventTypes.Numbers;
+    var eventName = eventType.GetEventName();
 
     for (int i = 1; i <= 10; i++)
     {
-        var data = $"data: {i}\n\n";
+        var data = $"event: {eventName}\ndata: {i}\n\n";
         await response.WriteAsync(data);
         await response.Body.FlushAsync();
 
