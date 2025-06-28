@@ -1,0 +1,45 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Backend (.NET)",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "dotnet",
+            "runtimeArgs": ["run"],
+            "cwd": "${workspaceFolder}/backend",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        },
+        {
+            "name": "Launch Flutter (Mobile)",
+            "type": "dart",
+            "request": "launch",
+            "program": "frontend/lib/main.dart",
+            "cwd": "${workspaceFolder}/frontend",
+            "toolArgs": [
+                "--flavor",
+                "development"
+            ]
+        },
+        {
+            "name": "Launch Flutter (Web)",
+            "type": "dart",
+            "request": "launch",
+            "program": "frontend/lib/main.dart",
+            "cwd": "${workspaceFolder}/frontend",
+            "args": [
+                "-d",
+                "chrome",
+                "--web-port",
+                "3000"
+            ]
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Full Stack (Web)",
+            "configurations": ["Launch Backend (.NET)", "Launch Flutter (Web)"]
+        }
+    ]
+} 
