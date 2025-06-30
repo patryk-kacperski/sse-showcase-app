@@ -28,6 +28,7 @@ class ExamplesListScreen extends StatelessWidget {
           final example = Examples.values[index];
           return ListTile(
             title: Text(example.name),
+            trailing: const Icon(Icons.chevron_right),
             onTap: () => _onExampleTap(context, example),
           );
         },
