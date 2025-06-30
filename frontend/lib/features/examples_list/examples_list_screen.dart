@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sse_showcase/features/examples/standard_http/standard_http_example_screen.dart';
+import 'package:sse_showcase/widgets/standard_app_bar.dart';
 import 'examples.dart';
 
 class ExamplesListScreen extends StatelessWidget {
@@ -19,8 +20,8 @@ class ExamplesListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('SSE Examples'),
+      appBar: const StandardAppBar(
+        title: 'SSE Examples',
       ),
       body: ListView.builder(
         itemCount: Examples.values.length,
