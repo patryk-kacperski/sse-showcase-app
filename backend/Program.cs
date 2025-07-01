@@ -1,3 +1,5 @@
+using SSEShowcase.Util;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-using SSEShowcase.Util;
 
 var app = builder.Build();
 
@@ -20,9 +21,9 @@ app.UseHttpsRedirection();
 
 app.MapGet("/numbers", async (HttpResponse response) =>
 {
-    response.Headers.Add("Content-Type", "text/event-stream");
-    response.Headers.Add("Cache-Control", "no-cache");
-    response.Headers.Add("Connection", "keep-alive");
+    response.Headers.Append("Content-Type", "text/event-stream");
+    response.Headers.Append("Cache-Control", "no-cache");
+    response.Headers.Append("Connection", "keep-alive");
 
     var random = new Random();
     var eventType = SseEventTypes.Numbers;
