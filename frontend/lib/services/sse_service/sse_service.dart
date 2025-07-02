@@ -12,8 +12,10 @@ class SseService {
     final client = http.Client();
 
     try {
-      final request =
-          http.Request('GET', Uri.parse('$_baseUrl$_numbersEndpoint'));
+      final request = http.Request(
+        'GET',
+        Uri.parse('$_baseUrl$_numbersEndpoint'),
+      );
       request.headers['Accept'] = 'text/event-stream';
       request.headers['Cache-Control'] = 'no-cache';
 
@@ -21,61 +23,39 @@ class SseService {
 
       if (response.statusCode != 200) {
         throw Exception(
-            'Failed to connect to SSE endpoint: ${response.statusCode}');
+          'Failed to connect to SSE endpoint: ${response.statusCode}',
+        );
       }
 
-      final streamController = StreamController<String>();
       String buffer = '';
 
-      response.stream.transform(utf8.decoder).listen(
-        (data) {
-          buffer += data;
-          final lines = buffer.split('\n');
+      await for (final chunk in response.stream.transform(utf8.decoder)) {
+        buffer += chunk;
 
-          // Keep the last incomplete line in the buffer
-          buffer = lines.removeLast();
+        // Process complete events (separated by double newline)
+        while (buffer.contains('\n\n')) {
+          final eventEndIndex = buffer.indexOf('\n\n');
+          final eventData = buffer.substring(0, eventEndIndex);
+          buffer = buffer.substring(eventEndIndex + 2);
 
-          for (final line in lines) {
-            if (line.trim().isNotEmpty) {
-              streamController.add(line);
-            }
-          }
-        },
-        onError: (error) {
-          streamController.addError(error);
-        },
-        onDone: () {
-          if (buffer.trim().isNotEmpty) {
-            streamController.add(buffer);
-          }
-          streamController.close();
-        },
-      );
-
-      String eventBuffer = '';
-
-      await for (final line in streamController.stream) {
-        if (line.isEmpty) {
-          if (eventBuffer.isNotEmpty) {
+          if (eventData.trim().isNotEmpty) {
             try {
-              final sseEvent = SseEvent.fromRawData(eventBuffer);
+              final sseEvent = SseEvent.fromRawData(eventData);
+
               if (sseEvent.event == 'numbers' && sseEvent.data.isNotEmpty) {
                 yield NumberData.fromString(sseEvent.data);
               }
             } catch (e) {
               // Skip malformed events
             }
-            eventBuffer = '';
           }
-        } else {
-          eventBuffer += '$line\n';
         }
       }
 
       // Process any remaining event in buffer
-      if (eventBuffer.isNotEmpty) {
+      if (buffer.trim().isNotEmpty) {
         try {
-          final sseEvent = SseEvent.fromRawData(eventBuffer);
+          final sseEvent = SseEvent.fromRawData(buffer);
           if (sseEvent.event == 'numbers' && sseEvent.data.isNotEmpty) {
             yield NumberData.fromString(sseEvent.data);
           }

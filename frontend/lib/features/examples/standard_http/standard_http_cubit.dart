@@ -4,12 +4,11 @@ import 'package:sse_showcase/models/api/number_data.dart';
 import 'package:sse_showcase/services/sse_service/sse_service.dart';
 
 class StandardHttpCubit extends Cubit<StandardHttpState> {
-  final SseService _sseService;
+  StandardHttpCubit({required SseService sseService})
+    : _sseService = sseService,
+      super(const StandardHttpInitial());
 
-  StandardHttpCubit({
-    required SseService sseService,
-  })  : _sseService = sseService,
-        super(const StandardHttpInitial());
+  final SseService _sseService;
 
   Future<void> startStreaming() async {
     try {

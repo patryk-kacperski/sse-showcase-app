@@ -17,33 +17,27 @@ class StandardHttpLoading extends StandardHttpState {
 }
 
 class StandardHttpReceivingData extends StandardHttpState {
-  final List<NumberData> numbers;
+  const StandardHttpReceivingData({required this.numbers});
 
-  const StandardHttpReceivingData({
-    required this.numbers,
-  });
+  final List<NumberData> numbers;
 
   @override
   List<Object?> get props => [numbers];
 }
 
 class StandardHttpCompleted extends StandardHttpState {
-  final List<NumberData> numbers;
+  const StandardHttpCompleted({required this.numbers});
 
-  const StandardHttpCompleted({
-    required this.numbers,
-  });
+  final List<NumberData> numbers;
 
   @override
   List<Object?> get props => [numbers];
 }
 
 class StandardHttpError extends StandardHttpState {
-  final String message;
+  const StandardHttpError({required this.message});
 
-  const StandardHttpError({
-    required this.message,
-  });
+  final String message;
 
   @override
   List<Object?> get props => [message];

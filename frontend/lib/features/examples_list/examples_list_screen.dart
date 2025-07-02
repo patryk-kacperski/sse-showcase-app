@@ -20,9 +20,7 @@ class ExamplesListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const StandardAppBar(
-        title: 'SSE Examples',
-      ),
+      appBar: const StandardAppBar(title: 'SSE Examples'),
       body: ListView.builder(
         itemCount: Examples.values.length,
         itemBuilder: (context, index) {

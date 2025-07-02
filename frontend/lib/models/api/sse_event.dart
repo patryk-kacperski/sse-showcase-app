@@ -1,13 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class SseEvent extends Equatable {
-  final String event;
-  final String data;
-
-  const SseEvent({
-    required this.event,
-    required this.data,
-  });
+  const SseEvent({required this.event, required this.data});
 
   factory SseEvent.fromRawData(String rawData) {
     final lines = rawData.split('\n');
@@ -22,11 +16,11 @@ class SseEvent extends Equatable {
       }
     }
 
-    return SseEvent(
-      event: event,
-      data: data,
-    );
+    return SseEvent(event: event, data: data);
   }
+
+  final String event;
+  final String data;
 
   @override
   String toString() => 'SseEvent(event: $event, data: $data)';
