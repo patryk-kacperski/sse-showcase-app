@@ -1,21 +1,21 @@
 import 'package:equatable/equatable.dart';
 
-sealed class StandardHttpExampleState extends Equatable {
-  const StandardHttpExampleState();
+sealed class StandardHttpExampleState2 extends Equatable {
+  const StandardHttpExampleState2();
 
   @override
   List<Object?> get props => [];
 }
 
-class StandardHttpExampleInitial extends StandardHttpExampleState {
+class StandardHttpExampleInitial extends StandardHttpExampleState2 {
   const StandardHttpExampleInitial();
 }
 
-class StandardHttpExampleLoading extends StandardHttpExampleState {
+class StandardHttpExampleLoading extends StandardHttpExampleState2 {
   const StandardHttpExampleLoading();
 }
 
-class StandardHttpExampleReceivingData extends StandardHttpExampleState {
+class StandardHttpExampleReceivingData extends StandardHttpExampleState2 {
   const StandardHttpExampleReceivingData({required this.numbers});
 
   final List<String> numbers;
@@ -24,7 +24,7 @@ class StandardHttpExampleReceivingData extends StandardHttpExampleState {
   List<Object?> get props => [numbers];
 }
 
-class StandardHttpExampleCompleted extends StandardHttpExampleState {
+class StandardHttpExampleCompleted extends StandardHttpExampleState2 {
   const StandardHttpExampleCompleted({required this.numbers});
 
   final List<String> numbers;
@@ -33,7 +33,7 @@ class StandardHttpExampleCompleted extends StandardHttpExampleState {
   List<Object?> get props => [numbers];
 }
 
-class StandardHttpExampleError extends StandardHttpExampleState {
+class StandardHttpExampleError extends StandardHttpExampleState2 {
   const StandardHttpExampleError({required this.message});
 
   final String message;

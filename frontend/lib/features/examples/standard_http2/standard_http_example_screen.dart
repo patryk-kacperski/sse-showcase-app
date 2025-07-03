@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart';
-import 'package:sse_showcase/features/examples/standard_http/standard_http_example_cubit.dart';
-import 'package:sse_showcase/features/examples/standard_http/standard_http_example_state.dart';
+import 'package:sse_showcase/features/examples/standard_http2/standard_http_example_cubit.dart';
+import 'package:sse_showcase/features/examples/standard_http2/standard_http_example_state.dart';
+import 'package:sse_showcase/services/sse_service/sse_service.dart';
 import 'package:sse_showcase/widgets/standard_app_bar.dart';
 import 'package:sse_showcase/widgets/standard_list_tile.dart';
 import 'package:sse_showcase/widgets/standard_titled_list_view.dart';
 
-class StandardHttpExampleScreen extends StatelessWidget {
-  const StandardHttpExampleScreen({super.key});
+class StandardHttpExampleScreen2 extends StatelessWidget {
+  const StandardHttpExampleScreen2({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          StandardHttpExampleCubit(client: Client())..startStreaming(),
+          StandardHttpExampleCubit2(sseService: SseService())..startStreaming(),
       child: const Scaffold(
         appBar: StandardAppBar(title: 'Standard HTTP Example'),
         body: SafeArea(child: _StandardHttpContent()),
@@ -28,7 +28,7 @@ class _StandardHttpContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<StandardHttpExampleCubit, StandardHttpExampleState>(
+    return BlocBuilder<StandardHttpExampleCubit2, StandardHttpExampleState2>(
       builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.all(16.0),
@@ -39,7 +39,7 @@ class _StandardHttpContent extends StatelessWidget {
               if (state is StandardHttpExampleCompleted)
                 ElevatedButton(
                   onPressed: () {
-                    context.read<StandardHttpExampleCubit>().refreshData();
+                    context.read<StandardHttpExampleCubit2>().refreshData();
                   },
                   child: const Text('Refresh'),
                 ),
@@ -54,7 +54,7 @@ class _StandardHttpContent extends StatelessWidget {
 class _StandardHttpStateContent extends StatelessWidget {
   const _StandardHttpStateContent({required this.state});
 
-  final StandardHttpExampleState state;
+  final StandardHttpExampleState2 state;
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +127,7 @@ class _StandardHttpStateContent extends StatelessWidget {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                context.read<StandardHttpExampleCubit>().refreshData();
+                context.read<StandardHttpExampleCubit2>().refreshData();
               },
               child: const Text('Retry'),
             ),
