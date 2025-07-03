@@ -1,23 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:sse_showcase/utils/api.dart';
 import 'package:sse_showcase/models/api/number_data.dart';
 import 'package:sse_showcase/models/api/sse_event.dart';
 
 class SseService {
-  static const String _baseUrl = 'http://localhost:5080';
-  static const String _numbersEndpoint = '/numbers';
-
   Stream<NumberData> streamNumbers() async* {
     final client = http.Client();
 
     try {
-      final request = http.Request(
-        'GET',
-        Uri.parse('$_baseUrl$_numbersEndpoint'),
-      );
-      request.headers['Accept'] = 'text/event-stream';
-      request.headers['Cache-Control'] = 'no-cache';
+      final request = createNumbersRequest();
 
       final response = await client.send(request);
 
