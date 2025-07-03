@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:sse_showcase/models/api/number_data.dart';
 
 sealed class StandardHttpExampleState2 extends Equatable {
   const StandardHttpExampleState2();
@@ -19,7 +18,7 @@ class StandardHttpExampleLoading extends StandardHttpExampleState2 {
 class StandardHttpExampleReceivingData extends StandardHttpExampleState2 {
   const StandardHttpExampleReceivingData({required this.numbers});
 
-  final List<NumberData> numbers;
+  final List<String> numbers;
 
   @override
   List<Object?> get props => [numbers];
@@ -28,7 +27,7 @@ class StandardHttpExampleReceivingData extends StandardHttpExampleState2 {
 class StandardHttpExampleCompleted extends StandardHttpExampleState2 {
   const StandardHttpExampleCompleted({required this.numbers});
 
-  final List<NumberData> numbers;
+  final List<String> numbers;
 
   @override
   List<Object?> get props => [numbers];

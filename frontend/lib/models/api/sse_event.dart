@@ -4,6 +4,10 @@ class SseEvent extends Equatable {
   const SseEvent({required this.event, required this.data});
 
   factory SseEvent.fromRawData(String rawData) {
+    if (!rawData.contains('event:') || !rawData.contains('data:')) {
+      throw FormatException('Invalid SSE event data: $rawData');
+    }
+
     final lines = rawData.split('\n');
     String event = '';
     String data = '';

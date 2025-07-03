@@ -83,7 +83,7 @@ class _StandardHttpStateContent extends StatelessWidget {
             return StandardListTile(
               leading: const Icon(Icons.numbers),
               title: Text(
-                'Number: ${numbers[index].value}',
+                'Number: ${numbers[index]}',
                 style: const TextStyle(fontSize: 18),
               ),
             );
@@ -102,7 +102,7 @@ class _StandardHttpStateContent extends StatelessWidget {
             return StandardListTile(
               leading: const Icon(Icons.check_circle, color: Colors.green),
               title: Text(
-                'Number: ${numbers[index].value}',
+                'Number: ${numbers[index]}',
                 style: const TextStyle(fontSize: 18),
               ),
             );

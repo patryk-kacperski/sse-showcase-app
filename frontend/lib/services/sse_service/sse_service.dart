@@ -2,16 +2,18 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:sse_showcase/utils/api.dart';
-import 'package:sse_showcase/models/api/number_data.dart';
 import 'package:sse_showcase/models/api/sse_event.dart';
 
 class SseService {
-  Stream<NumberData> streamNumbers() async* {
+  Stream<SseEvent> streamNumbers() async* {
+    final request = createNumbersRequest();
+    yield* _stream(request);
+  }
+
+  Stream<SseEvent> _stream(http.Request request) async* {
     final client = http.Client();
 
     try {
-      final request = createNumbersRequest();
-
       final response = await client.send(request);
 
       if (response.statusCode != 200) {
@@ -20,40 +22,11 @@ class SseService {
         );
       }
 
-      String buffer = '';
-
       await for (final chunk in response.stream.transform(utf8.decoder)) {
-        buffer += chunk;
+        final eventData = chunk.trim();
 
-        // Process complete events (separated by double newline)
-        while (buffer.contains('\n\n')) {
-          final eventEndIndex = buffer.indexOf('\n\n');
-          final eventData = buffer.substring(0, eventEndIndex);
-          buffer = buffer.substring(eventEndIndex + 2);
-
-          if (eventData.trim().isNotEmpty) {
-            try {
-              final sseEvent = SseEvent.fromRawData(eventData);
-
-              if (sseEvent.event == 'numbers' && sseEvent.data.isNotEmpty) {
-                yield NumberData.fromString(sseEvent.data);
-              }
-            } catch (e) {
-              // Skip malformed events
-            }
-          }
-        }
-      }
-
-      // Process any remaining event in buffer
-      if (buffer.trim().isNotEmpty) {
-        try {
-          final sseEvent = SseEvent.fromRawData(buffer);
-          if (sseEvent.event == 'numbers' && sseEvent.data.isNotEmpty) {
-            yield NumberData.fromString(sseEvent.data);
-          }
-        } catch (e) {
-          // Skip malformed events
+        if (eventData.isNotEmpty) {
+          yield SseEvent.fromRawData(eventData);
         }
       }
     } catch (error) {
