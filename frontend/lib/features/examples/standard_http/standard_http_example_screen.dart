@@ -86,7 +86,6 @@ class _StandardHttpStateContent extends StatelessWidget {
                 'Number: ${numbers[index].value}',
                 style: const TextStyle(fontSize: 18),
               ),
-              subtitle: Text('Received ${index + 1} of 10'),
             );
           },
         ),
