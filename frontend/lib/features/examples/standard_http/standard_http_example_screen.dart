@@ -5,6 +5,7 @@ import 'package:sse_showcase/features/examples/standard_http/standard_http_examp
 import 'package:sse_showcase/services/sse_service/sse_service.dart';
 import 'package:sse_showcase/widgets/standard_app_bar.dart';
 import 'package:sse_showcase/widgets/standard_list_tile.dart';
+import 'package:sse_showcase/widgets/standard_titled_list_view.dart';
 
 class StandardHttpExampleScreen extends StatelessWidget {
   const StandardHttpExampleScreen({super.key});
@@ -74,57 +75,40 @@ class _StandardHttpStateContent extends StatelessWidget {
           ],
         ),
       ),
-      StandardHttpExampleReceivingData(numbers: final numbers) => Column(
-        children: [
-          const Text(
-            'Streaming Numbers:',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      StandardHttpExampleReceivingData(numbers: final numbers) =>
+        StandardTitledListView(
+          title: 'Streaming Numbers:',
+          itemCount: numbers.length,
+          itemBuilder: (context, index) {
+            return StandardListTile(
+              leading: const Icon(Icons.numbers),
+              title: Text(
+                'Number: ${numbers[index].value}',
+                style: const TextStyle(fontSize: 18),
+              ),
+              subtitle: Text('Received ${index + 1} of 10'),
+            );
+          },
+        ),
+      StandardHttpExampleCompleted(numbers: final numbers) =>
+        StandardTitledListView(
+          title: 'Streaming Completed!',
+          titleStyle: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.green,
           ),
-          const SizedBox(height: 16),
-          Expanded(
-            child: ListView.builder(
-              itemCount: numbers.length,
-              itemBuilder: (context, index) {
-                return StandardListTile(
-                  leading: const Icon(Icons.numbers),
-                  title: Text(
-                    'Number: ${numbers[index].value}',
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                  subtitle: Text('Received ${index + 1} of 10'),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-      StandardHttpExampleCompleted(numbers: final numbers) => Column(
-        children: [
-          const Text(
-            'Streaming Completed!',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.green,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Expanded(
-            child: ListView.builder(
-              itemCount: numbers.length,
-              itemBuilder: (context, index) {
-                return StandardListTile(
-                  leading: const Icon(Icons.check_circle, color: Colors.green),
-                  title: Text(
-                    'Number: ${numbers[index].value}',
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+          itemCount: numbers.length,
+          itemBuilder: (context, index) {
+            return StandardListTile(
+              leading: const Icon(Icons.check_circle, color: Colors.green),
+              title: Text(
+                'Number: ${numbers[index].value}',
+                style: const TextStyle(fontSize: 18),
+              ),
+            );
+          },
+        ),
       StandardHttpExampleError(message: final message) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
