@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sse_showcase/features/examples/standard_http/standard_http_example_screen.dart';
 import 'package:sse_showcase/widgets/standard_app_bar.dart';
+import 'package:sse_showcase/widgets/standard_list_tile.dart';
 import 'examples.dart';
 
 class ExamplesListScreen extends StatelessWidget {
@@ -25,7 +26,7 @@ class ExamplesListScreen extends StatelessWidget {
         itemCount: Examples.values.length,
         itemBuilder: (context, index) {
           final example = Examples.values[index];
-          return ListTile(
+          return StandardListTile(
             title: Text(example.name),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => _onExampleTap(context, example),
