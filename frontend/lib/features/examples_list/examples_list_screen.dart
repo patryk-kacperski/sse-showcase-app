@@ -30,6 +30,7 @@ class ExamplesListScreen extends StatelessWidget {
     return Scaffold(
       appBar: const StandardAppBar(title: 'SSE Examples'),
       body: ListView.builder(
+        padding: const EdgeInsets.all(16),
         itemCount: Examples.values.length,
         itemBuilder: (context, index) {
           final example = Examples.values[index];

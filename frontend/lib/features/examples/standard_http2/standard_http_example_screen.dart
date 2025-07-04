@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 import 'package:sse_showcase/features/examples/standard_http2/standard_http_example_cubit.dart';
 import 'package:sse_showcase/features/examples/standard_http2/standard_http_example_state.dart';
 import 'package:sse_showcase/services/sse_service/sse_service.dart';
@@ -14,7 +15,8 @@ class StandardHttpExampleScreen2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          StandardHttpExampleCubit2(sseService: SseService())..startStreaming(),
+          StandardHttpExampleCubit2(sseService: SseService(http.Client()))
+            ..startStreaming(),
       child: const Scaffold(
         appBar: StandardAppBar(title: 'Standard HTTP Example'),
         body: SafeArea(child: _StandardHttpContent()),

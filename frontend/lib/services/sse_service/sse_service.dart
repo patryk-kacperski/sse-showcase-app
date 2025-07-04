@@ -5,16 +5,18 @@ import 'package:sse_showcase/utils/api.dart';
 import 'package:sse_showcase/models/api/sse_event.dart';
 
 class SseService {
+  SseService(this._client);
+
+  final http.Client _client;
+
   Stream<SseEvent> streamNumbers() async* {
     final request = createNumbersRequest();
     yield* _stream(request);
   }
 
   Stream<SseEvent> _stream(http.Request request) async* {
-    final client = http.Client();
-
     try {
-      final response = await client.send(request);
+      final response = await _client.send(request);
 
       if (response.statusCode != 200) {
         throw Exception(
@@ -31,8 +33,6 @@ class SseService {
       }
     } catch (error) {
       throw Exception('SSE streaming error: $error');
-    } finally {
-      client.close();
     }
   }
 }
