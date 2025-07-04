@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:sse_showcase/features/examples/standard_http2/standard_http_example_cubit.dart';
 import 'package:sse_showcase/features/examples/standard_http2/standard_http_example_state.dart';
 import 'package:sse_showcase/services/sse_service/sse_service.dart';
