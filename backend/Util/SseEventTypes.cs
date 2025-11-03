@@ -2,7 +2,8 @@ namespace SSEShowcase.Util;
 
 public enum SseEventTypes
 {
-  Numbers
+  Numbers,
+  LoremIpsum
 }
 
 public static class SseEventTypesExtensions
