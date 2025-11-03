@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sse_showcase/features/examples/lorem_ipsum/lorem_ipsum_screen.dart';
 import 'package:sse_showcase/features/examples/standard_http/standard_http_example_screen.dart';
 import 'package:sse_showcase/features/examples/standard_http2/standard_http_example_screen.dart';
 import 'package:sse_showcase/widgets/standard_app_bar.dart';
@@ -23,6 +24,10 @@ class ExamplesListScreen extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => const StandardHttpExampleScreen2(),
             ),
+          );
+        case Examples.loremIpsum:
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const LoremIpsumScreen()),
           );
       }
     }

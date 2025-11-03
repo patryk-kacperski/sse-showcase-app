@@ -95,7 +95,7 @@ app.MapGet("/text-stream", async (HttpResponse response) =>
 
         if (charactersSent < totalLength)
         {
-            var delay = random.NextDouble() * 0.2 + 0.1;
+            var delay = random.NextDouble() * 0.04 + 0.02;
             await Task.Delay(TimeSpan.FromSeconds(delay));
         }
     }

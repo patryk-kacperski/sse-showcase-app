@@ -14,6 +14,11 @@ class SseService {
     yield* _stream(request);
   }
 
+  Stream<SseEvent> streamLoremIpsum() async* {
+    final request = createTextStreamRequest();
+    yield* _stream(request);
+  }
+
   Stream<SseEvent> _stream(http.Request request) async* {
     try {
       final response = await _client.send(request);
