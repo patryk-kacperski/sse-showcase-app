@@ -8,25 +8,25 @@ import 'examples.dart';
 class ExamplesListScreen extends StatelessWidget {
   const ExamplesListScreen({super.key});
 
-  void _onExampleTap(BuildContext context, Examples example) {
-    switch (example) {
-      case Examples.standardHttp:
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const StandardHttpExampleScreen(),
-          ),
-        );
-      case Examples.standardHttp2:
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const StandardHttpExampleScreen2(),
-          ),
-        );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    void onExampleTap(Examples example) {
+      switch (example) {
+        case Examples.standardHttp:
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const StandardHttpExampleScreen(),
+            ),
+          );
+        case Examples.standardHttp2:
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const StandardHttpExampleScreen2(),
+            ),
+          );
+      }
+    }
+
     return Scaffold(
       appBar: const StandardAppBar(title: 'SSE Examples'),
       body: ListView.builder(
@@ -37,7 +37,7 @@ class ExamplesListScreen extends StatelessWidget {
           return StandardListTile(
             title: Text(example.name),
             trailing: const Icon(Icons.chevron_right),
-            onTap: () => _onExampleTap(context, example),
+            onTap: () => onExampleTap(example),
           );
         },
       ),
