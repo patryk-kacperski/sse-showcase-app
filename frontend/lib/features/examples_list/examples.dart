@@ -1,7 +1,8 @@
 enum Examples {
   standardHttp,
   standardHttp2,
-  loremIpsum;
+  loremIpsum,
+  shapesAndColors;
 
   String get name {
     switch (this) {
@@ -11,6 +12,8 @@ enum Examples {
         return 'Standard HTTP + SseService';
       case Examples.loremIpsum:
         return 'Lorem Ipsum Text Stream';
+      case Examples.shapesAndColors:
+        return 'Shapes and Colors';
     }
   }
 }

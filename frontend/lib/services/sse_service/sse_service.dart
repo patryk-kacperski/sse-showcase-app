@@ -19,6 +19,11 @@ class SseService {
     yield* _stream(request);
   }
 
+  Stream<SseEvent> streamShapesAndColors() async* {
+    final request = createShapesAndColorsRequest();
+    yield* _stream(request);
+  }
+
   Stream<SseEvent> _stream(http.Request request) async* {
     try {
       final response = await _client.send(request);
