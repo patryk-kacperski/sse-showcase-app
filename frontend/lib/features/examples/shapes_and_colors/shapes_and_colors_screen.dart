@@ -85,11 +85,24 @@ class _ShapesAndColorsStateContent extends StatelessWidget {
                   return SizedBox(
                     width: animatedSize,
                     height: animatedSize,
-                    child: CustomPaint(
-                      painter: ShapePainter(
-                        shape: shape,
-                        size: animatedSize,
-                        color: animatedColor ?? color,
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 400),
+                      transitionBuilder: (child, animation) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: ScaleTransition(
+                            scale: animation,
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: CustomPaint(
+                        key: ValueKey(shape),
+                        painter: ShapePainter(
+                          shape: shape,
+                          size: animatedSize,
+                          color: animatedColor ?? color,
+                        ),
                       ),
                     ),
                   );
