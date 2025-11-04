@@ -1,6 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sse_showcase/features/examples/lorem_ipsum/lorem_ipsum_state.dart';
+import 'package:sse_showcase/models/api/lorem_ipsum_chunk.dart';
+import 'package:sse_showcase/models/api/sse_event.dart';
 import 'package:sse_showcase/services/sse_service/sse_service.dart';
 
 class LoremIpsumCubit extends Cubit<LoremIpsumState> {
@@ -9,40 +13,47 @@ class LoremIpsumCubit extends Cubit<LoremIpsumState> {
       super(const LoremIpsumInitial());
 
   final SseService _sseService;
+  StreamSubscription<SseEvent>? _streamSubscription;
 
   Future<void> startStreaming() async {
+    _streamSubscription?.cancel();
+
     try {
       emit(const LoremIpsumLoading());
 
       final textBuffer = StringBuffer();
 
-      await for (final sseEvent in _sseService.streamLoremIpsum()) {
-        final jsonData = jsonDecode(sseEvent.data) as Map<String, dynamic>;
+      _streamSubscription = _sseService.streamLoremIpsum().listen(
+        (sseEvent) {
+          final jsonData = jsonDecode(sseEvent.data) as Map<String, dynamic>;
+          final loremIpsumChunk = LoremIpsumChunk.fromJson(jsonData);
 
-        final chunk = jsonData['chunk'] as String;
-        final charactersSent = jsonData['characters_sent'] as int;
-        final charactersRemaining = jsonData['characters_remaining'] as int;
+          textBuffer.write(loremIpsumChunk.chunk);
 
-        textBuffer.write(chunk);
-
-        emit(
-          LoremIpsumReceivingData(
-            text: textBuffer.toString(),
-            charactersSent: charactersSent,
-            charactersRemaining: charactersRemaining,
-          ),
-        );
-      }
-
-      if (state is LoremIpsumReceivingData) {
-        final currentState = state as LoremIpsumReceivingData;
-        emit(
-          LoremIpsumCompleted(
-            text: currentState.text,
-            charactersSent: currentState.charactersSent,
-          ),
-        );
-      }
+          emit(
+            LoremIpsumReceivingData(
+              text: textBuffer.toString(),
+              charactersSent: loremIpsumChunk.charactersSent,
+              charactersRemaining: loremIpsumChunk.charactersRemaining,
+            ),
+          );
+        },
+        onError: (error) {
+          emit(LoremIpsumError(message: error.toString()));
+        },
+        onDone: () {
+          if (state is LoremIpsumReceivingData) {
+            final currentState = state as LoremIpsumReceivingData;
+            emit(
+              LoremIpsumCompleted(
+                text: currentState.text,
+                charactersSent: currentState.charactersSent,
+              ),
+            );
+          }
+        },
+        cancelOnError: false,
+      );
     } catch (error) {
       emit(LoremIpsumError(message: error.toString()));
     }
@@ -55,8 +66,10 @@ class LoremIpsumCubit extends Cubit<LoremIpsumState> {
   void clearData() {
     emit(const LoremIpsumInitial());
   }
-}
 
-// TODO: Git connection
-// TODO: JSON Serialization
-// TODO: Handle error after leaving the screen while streaming
+  @override
+  Future<void> close() {
+    _streamSubscription?.cancel();
+    return super.close();
+  }
+}

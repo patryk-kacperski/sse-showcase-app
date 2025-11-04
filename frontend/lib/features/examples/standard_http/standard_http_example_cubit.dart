@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,8 +12,11 @@ class StandardHttpExampleCubit extends Cubit<StandardHttpExampleState> {
       super(const StandardHttpExampleInitial());
 
   final Client _client;
+  StreamSubscription<String>? _streamSubscription;
 
   Future<void> startStreaming() async {
+    _streamSubscription?.cancel();
+
     try {
       emit(const StandardHttpExampleLoading());
 
@@ -31,12 +35,23 @@ class StandardHttpExampleCubit extends Cubit<StandardHttpExampleState> {
         return;
       }
 
-      await for (final chunk in response.stream.transform(utf8.decoder)) {
-        numbers.add(chunk);
-        emit(StandardHttpExampleReceivingData(numbers: List.from(numbers)));
-      }
-
-      emit(StandardHttpExampleCompleted(numbers: numbers));
+      _streamSubscription = response.stream
+          .transform(utf8.decoder)
+          .listen(
+            (chunk) {
+              numbers.add(chunk);
+              emit(
+                StandardHttpExampleReceivingData(numbers: List.from(numbers)),
+              );
+            },
+            onError: (error) {
+              emit(StandardHttpExampleError(message: error.toString()));
+            },
+            onDone: () {
+              emit(StandardHttpExampleCompleted(numbers: numbers));
+            },
+            cancelOnError: false,
+          );
     } catch (error) {
       emit(StandardHttpExampleError(message: error.toString()));
     }
@@ -48,5 +63,11 @@ class StandardHttpExampleCubit extends Cubit<StandardHttpExampleState> {
 
   void clearData() {
     emit(const StandardHttpExampleInitial());
+  }
+
+  @override
+  Future<void> close() {
+    _streamSubscription?.cancel();
+    return super.close();
   }
 }
