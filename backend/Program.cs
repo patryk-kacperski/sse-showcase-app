@@ -103,4 +103,51 @@ app.MapGet("/text-stream", async (HttpResponse response) =>
 .WithName("GetTextStream")
 .WithOpenApi();
 
+app.MapGet("/shapes-and-colors", async (HttpResponse response) =>
+{
+    response.Headers.Append("Content-Type", "text/event-stream");
+    response.Headers.Append("Cache-Control", "no-cache");
+    response.Headers.Append("Connection", "keep-alive");
+
+    var random = new Random();
+    var shapes = Enum.GetValues<Shape>();
+    var colors = Enum.GetValues<Color>();
+    var intensities = Enum.GetValues<Intensity>();
+
+    while (true)
+    {
+        var eventType = random.Next(2) == 0 ? SseEventTypes.ChangeShape : SseEventTypes.ChangeColor;
+        var eventName = eventType.GetEventName();
+
+        string jsonData;
+        if (eventType == SseEventTypes.ChangeShape)
+        {
+            var shape = shapes[random.Next(shapes.Length)];
+            jsonData = System.Text.Json.JsonSerializer.Serialize(new
+            {
+                shape = shape.GetShapeName(),
+                size = random.Next(50, 201)
+            });
+        }
+        else
+        {
+            var color = colors[random.Next(colors.Length)];
+            var intensity = intensities[random.Next(intensities.Length)];
+            jsonData = System.Text.Json.JsonSerializer.Serialize(new
+            {
+                color = color.GetColorName(),
+                intensity = intensity.GetIntensityName()
+            });
+        }
+
+        var data = $"event: {eventName}\ndata: {jsonData}\n\n";
+        await response.WriteAsync(data);
+        await response.Body.FlushAsync();
+
+        await Task.Delay(TimeSpan.FromSeconds(0.5));
+    }
+})
+.WithName("GetShapesAndColors")
+.WithOpenApi();
+
 app.Run();
