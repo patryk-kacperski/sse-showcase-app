@@ -3,6 +3,7 @@ import 'package:sse_showcase/features/examples/lorem_ipsum/lorem_ipsum_screen.da
 import 'package:sse_showcase/features/examples/shapes_and_colors/shapes_and_colors_screen.dart';
 import 'package:sse_showcase/features/examples/standard_http/standard_http_example_screen.dart';
 import 'package:sse_showcase/features/examples/standard_http2/standard_http_example_screen.dart';
+import 'package:sse_showcase/features/examples/wikimedia/wikimedia_screen.dart';
 import 'package:sse_showcase/widgets/standard_app_bar.dart';
 import 'package:sse_showcase/widgets/standard_list_tile.dart';
 import 'examples.dart';
@@ -35,6 +36,10 @@ class ExamplesListScreen extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => const ShapesAndColorsScreen(),
             ),
+          );
+        case Examples.wikimedia:
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const WikimediaScreen()),
           );
       }
     }

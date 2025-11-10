@@ -2,7 +2,8 @@ enum Examples {
   standardHttp,
   standardHttp2,
   loremIpsum,
-  shapesAndColors;
+  shapesAndColors,
+  wikimedia;
 
   String get name {
     switch (this) {
@@ -14,6 +15,8 @@ enum Examples {
         return 'Lorem Ipsum Text Stream';
       case Examples.shapesAndColors:
         return 'Shapes and Colors';
+      case Examples.wikimedia:
+        return 'Wikimedia Recent Changes';
     }
   }
 }
