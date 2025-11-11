@@ -5,6 +5,7 @@ import 'package:sse_showcase/features/clients/clients.dart';
 import 'package:sse_showcase/services/sse_service/sse_service.dart';
 import 'package:sse_showcase/utils/sse_client/eventflux_client.dart';
 import 'package:sse_showcase/utils/sse_client/flutter_client_sse.dart';
+import 'package:sse_showcase/utils/sse_client/sse_channel_client.dart';
 import 'package:sse_showcase/utils/sse_client/sse_client.dart';
 import 'package:sse_showcase/utils/sse_client/sse_simple_client.dart';
 
@@ -35,6 +36,8 @@ class ClientDependencies extends StatelessWidget {
                 return FlutterClientSse();
               case Clients.eventflux:
                 return EventfluxClient();
+              case Clients.sseChannel:
+                return SseChannelClient();
             }
           },
         ),

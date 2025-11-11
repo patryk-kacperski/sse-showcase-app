@@ -1,7 +1,8 @@
 enum Clients {
   simple,
   flutterClientSse,
-  eventflux;
+  eventflux,
+  sseChannel;
 
   String get name {
     switch (this) {
@@ -11,6 +12,8 @@ enum Clients {
         return 'flutter_client_sse';
       case Clients.eventflux:
         return 'eventflux';
+      case Clients.sseChannel:
+        return 'sse_channel';
     }
   }
 }
