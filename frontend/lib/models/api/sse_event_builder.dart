@@ -5,7 +5,7 @@ class SseEventBuilder {
 
   String? event;
   String? data;
-  List<String>? id;
+  String? id;
 
   SseEvent? build() {
     final event = this.event;
@@ -33,11 +33,7 @@ class SseEventBuilder {
       if (value.isEmpty) {
         return;
       }
-      if (id == null) {
-        id = [value];
-      } else {
-        id = [...id!, value];
-      }
+      id = value;
     }
   }
 }

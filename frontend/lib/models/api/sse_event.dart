@@ -5,7 +5,7 @@ class SseEvent extends Equatable {
 
   final String event;
   final String data;
-  final List<String>? id;
+  final String? id;
 
   @override
   String toString() => 'SseEvent(id: $id, event: $event, data: $data)';
