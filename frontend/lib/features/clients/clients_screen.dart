@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sse_showcase/features/clients/client_scoped_navigator.dart';
+import 'package:sse_showcase/di/client_scoped_navigator.dart';
 import 'package:sse_showcase/features/clients/clients.dart';
 import 'package:sse_showcase/widgets/standard_app_bar.dart';
 import 'package:sse_showcase/widgets/standard_list_tile.dart';

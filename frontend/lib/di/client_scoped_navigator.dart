@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sse_showcase/features/clients/client_dependencies.dart';
+import 'package:sse_showcase/di/client_dependencies.dart';
 import 'package:sse_showcase/features/clients/clients.dart';
 import 'package:sse_showcase/features/examples_list/examples_list_screen.dart';
 
