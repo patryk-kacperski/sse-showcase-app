@@ -30,6 +30,9 @@ class StandardHttpExampleCubit2 extends Cubit<StandardHttpExampleState2> {
           emit(StandardHttpExampleError(message: error.toString()));
         },
         onDone: () {
+          if (state is StandardHttpExampleError) {
+            return;
+          }
           emit(StandardHttpExampleCompleted(numbers: List.from(numbers)));
         },
         cancelOnError: false,

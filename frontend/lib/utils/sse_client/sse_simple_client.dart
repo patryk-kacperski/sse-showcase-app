@@ -23,25 +23,24 @@ class SseSimpleClient implements SseClient {
 
       var eventBuilder = SseEventBuilder();
 
-      await for (final chunk in response.stream.transform(utf8.decoder)) {
-        final lines = chunk.split('\n');
-
-        for (final line in lines) {
-          if (line.isEmpty) {
-            final event = eventBuilder.build();
-            if (event != null) {
-              yield event;
-            }
-            eventBuilder = SseEventBuilder();
+      await for (final line
+          in response.stream
+              .transform(utf8.decoder)
+              .transform(const LineSplitter())) {
+        if (line.isEmpty) {
+          final event = eventBuilder.build();
+          if (event != null) {
+            yield event;
           }
-
-          final isComment = line.startsWith(':');
-          if (isComment) {
-            continue;
-          }
-
-          eventBuilder.addLine(line);
+          eventBuilder = SseEventBuilder();
         }
+
+        final isComment = line.startsWith(':');
+        if (isComment) {
+          continue;
+        }
+
+        eventBuilder.addLine(line);
       }
     } catch (error) {
       throw Exception('SSE streaming error: $error');
